@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+svg {
+  font: 10px sans-serif;
+}
+
+.x.axis path,
+.x.axis line{
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.y.axis path,
+.y.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.title {
+  font: 300 78px Helvetica Neue;
+  fill: #666;
+  text-align: right;
+}
+/*
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}*/
+
+.dot{
+  stroke: #000;
+}
+.dot2{
+  stroke: #000;
+}
+.dot3{
+  stroke: #000;
+}
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 4px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+</style>
+<body>
+<script src="d3.min.js"></script>
+<script src="d3.tip.js"></script>
+<script src="mort.js"></script>
+<!--
+<script src="scatterex.js"></script>
+-->
+</body>
+
+<style>
+.y.axis path {
+  display: none;
+}
+
+.y.axis line {
+  stroke: #fff;
+  stroke-opacity: .2;
+  shape-rendering: crispEdges;
+}
+
+.y.axis .zero line {
+  stroke: #000;
+  stroke-opacity: 1;
+}
+
+.title {
+  font: 300 78px Helvetica Neue;
+  fill: #666;
+  text-align: right;
+}
+
+.birthyear,
+.age {
+  text-anchor: middle;
+}
+
+.birthyear {
+  fill: #fff;
+}
+
+
+
+
+
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  font-size: x-small;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 1px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: x-small;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+}
+
+
+
+
+
+rect {
+  fill-opacity: .8;
+  fill: #006600;
+  /*fill: #e377c2;*/
+}
+rect:hover {
+  fill: #0A0 ;
+}
+</style>
+<body>
+  <script src="d3.min.js"></script>
+  <script src="d3.tip.js"></script>
+  <script src="struct.js"></script>
+</body>
