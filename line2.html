@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body { font: 12px sans-serif;}
+
+path {
+    stroke: steelblue;
+    stroke-width: 3;
+    fill: none;
+    shape-rendering: crispEdges;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 2;
+    shape-rendering: crispEdges;
+}
+
+.legend {
+    font-size: 20px;
+    text-anchor: middle;
+}
+
+.path,
+.line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 2;
+    shape-rendering: crispEdges;
+}
+
+.slide,
+.year {
+  text-anchor: middle;
+}
+
+.slide {
+  fill: #fff;
+}
+
+</style>
+<body>
+
+<script src="d3.min.js"></script>
+
+<script>
+//charisso
+// Set the dimensions of the canvas / graph
+var margin = {top: 60, right: 80, bottom: 120, left: 80},
+    width = 1100 - margin.left - margin.right,
+    height = 550 - margin.top - margin.bottom;
+
+// Parse the date / time
+//var parseDate = d3.time.format("%b %Y").parse;
+var formatDate = d3.time.format("%Y");
+
+// Set the ranges
+//var x = d3.time.scale().range([0, width]);
+//var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]);
+var x = d3.scale.linear().range([0, width]);
+
+// Define the axes
+var xAxis = d3.svg.axis().scale(x)//z)
+    .orient("bottom");
+    //.ticks(17)
+    //.tickValues(["1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013"]);
+    //.tickFormat(formatDate);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left")
+    .ticks(10);
+
+// Define the line
+var rateline = d3.svg.line()
+    //.interpolate("basis")
+    .x(function(d) { return x(d.year); })
+    .y(function(d) { return y(d.rate); });
+
+var color = d3.scale.category10();
+
+// Adds the svg canvas
+var svg = d3.select("body")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+var sliders = svg.append("g")
+    .attr("class", "sliders");
+// Get the data
+d3.csv("panels.csv", function(error, data) {
+
+    data.forEach(function(d) {
+        d.age = +d.age;
+        d.year = +d.year - 1996;
+        d.rate = +d.rate;
+    });
+
+    //getting extent of data
+    var year0 = d3.min(data, function(d) { return d.year; }),
+      year1 = d3.max(data, function(d) { return d.year; }),
+      set0 = d3.min(data, function(d) { return d.age; }),
+      set1 = d3.max(data, function(d) { return d.age; }),
+      set = set0;
+
+    // Scale the range of the data
+    //x.domain(d3.extent(data, function(d) { return d.year; }));
+    x.domain([set0, set0 + 18]);
+    var ym = d3.max(data, function(d) { return d.rate; });
+    y.domain([0, ym + ym * 0.1]);
+
+    // Nest the entries by pop
+    var dataNest = d3.nest()
+        .key(function(d) {return d.age;})
+        .key(function(d) {return d.age;})
+        //.key(function(d) {return d.age - 18;})
+        //.key(function(d) {return d.year;})
+        .rollup(function(v) { return v.map(function(d) { return {rate: d.rate, year: d.year}; }); })
+        //.key(function(d) {return d.pop;})
+        .map(data);
+        //console.log(JSON.stringify(d3.keys(data)));
+
+    var slide = sliders.selectAll(".sliders")
+            .data(d3.range(set0, set0 + 18, 18))
+        .enter().append("g")
+            .attr("class", "slide")
+            .attr("transform", function(slide) { return "translate(" + x(slide) + ",0)"; });
+            console.log(JSON.stringify(slide));
+//////THIS WORKS SO ADD TO HERE
+    //var fil = data.filter(function(d){ return d.age === set;});
+
+    slide.selectAll("path")
+            .data(function(slide) { return dataNest[set][slide] || [0, 0]; })
+            //.data(function(slide) { return data.filter(function(d){ return d.age === set;});})
+        .enter().append("path")
+            .attr("class", "line")
+            .style("stroke", function() { // Add the colours dynamically
+                return (data.color = color(Math.floor(d3.keys(data) / 18) % 3)); })
+            .style("opacity", 1)
+            //.style("stroke", "orange")
+            .attr("d", rateline(data.filter(function(d){ return d.age === 0;})));/*
+            .attr("d", rateline(data.filter(function(d){ return d.age === 18;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 36;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 54;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 72;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 90;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 108;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 126;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 144;})))
+            .attr("d", rateline(data.filter(function(d){ return d.age === 162;})));*/
+            //console.log(JSON.stringify(d3.keys(data)));
+            //console.log(JSON.stringify(fil));
+            //console.log(JSON.stringify(rateline(data.filter(function(d){ return d.age === 144;}))));
+            //console.log(JSON.stringify(fil.filter(function(d){ return d.key === "0";})));
+            //console.log(JSON.stringify(dataNest.keys()));
+            console.log(JSON.stringify(slide.selectAll("path").data(function(slide) { return dataNest[set][slide] || [0, 0]; })));
+            //.attr("x", x(set))
+            //.attr("y", y(set));
+            //.attr("width", barWidth)
+            //.attr("y", function(value) { return height - y(value); });
+            //.style("fill", "green")
+            //.style("stroke", "green");
+            //.attr("height", function(value) { return height - y(value); });
+
+    legendSpace = width / 3; // spacing for the legend
+
+    /*var dataNestLabels = d3.nest()
+        .key(function(d) {return d.age;})
+        .key(function(d) {return d.year;})
+        //.rollup(function(v) { return v.map(function(d) { return d.rate; }); })
+        //.key(function(d) {return d.pop;})
+        .entries(data);*/
+    // Loop through each pop / key
+    /*dataNest.forEach(function(d,i) {
+
+        /*svg.append("path")
+            .attr("class", "line")
+            .style("stroke", function() { // Add the colours dynamically
+                return (d.color = color(Math.floor(+d.key / 18) % 3)); })
+            .style("opacity", 0.5);*/
+            //.attr("id", 'tag'+d.key.replace(/\s+/g, '')) // assign ID
+            //.attr("d", rateline(d.values));
+            //console.log(JSON.stringify(d));
+            /*.on("mouseover", function(){
+                d3.select("#tag"+d.key.replace(/\s+/g, ''))
+                    .transition().duration(50)
+                    .style("opacity", 1);
+                })
+            .on("mouseout", function(){
+                d3.select("#tag"+d.key.replace(/\s+/g, ''))
+                    .transition().duration(50)
+                    .style("opacity", 0.5);
+            });*/
+
+        // Add the Legend
+    /*    svg.append("text")
+            .attr("x", (legendSpace / 2) + i * legendSpace)  // space legend
+            .attr("y", height + (margin.bottom / 2) + 5)
+            .attr("class", "legend")    // style the legend
+            .style("fill", function() { // Add the colours dynamically
+                return (d.color = color(Math.floor(+d.key / 18) % 3)); })
+            .text(function (){
+                if((Math.floor(+d.key / 18) % 3) === 0){
+                    return "Maori";
+                }else if((Math.floor(+d.key / 18) % 3) === 1){
+                    return "Non-Maori";
+                }else{
+                    return "Total";
+                }
+            });
+
+    });*/
+    /*svg.selectAll(".year")
+      .data(d3.range(year1 - 17, year1, 1))
+    .enter().append("text")
+      .attr("class", "year")
+      .attr("x", function(year) { return x(year); })
+      .attr("y", height + 8)
+      .attr("dy", ".71em")
+      .text(function(year) { return (year + ""); });*/
+
+
+    window.focus();
+    d3.select(window).on("keydown", function() {
+        update(d3.event.keyCode);
+    });
+
+    function update(key) {
+    if (!(set in data)) return;
+    switch (key) {
+      case 37:
+        if(set === 0 || set === 54 || set === 108){}else{
+          set -= 18;
+          //x.domain([set, set + 18]);
+          sliders.transition()
+              .duration(750)
+              .attr("transform", "translate(0,0)");
+
+          slide.selectAll("path")
+              .data(function(slide) { return dataNest[set][slide] || [0, 0]; })
+            .transition()
+              .duration(750)
+              .attr("d", rateline(data.filter(function(d){ return d.age === set;})));
+              console.log(JSON.stringify(slide.selectAll("path").data(function(slide) { return dataNest[set][slide] || [0, 0]; })));
+          /*slide.selectAll("path")
+              .data(function(slide) { return dataNest[set][slide] || [0, 0]; })
+            .transition()
+              .duration(750)
+              .attr("stroke", "none");*/
+//              .attr("d", rateline(data.filter(function(d){ return d.age === set;})));
+        }
+      break;
+      case 38:
+      if(set > 45){
+        set -= 54;
+        //x.domain([set, set + 18]);
+        sliders.transition()
+          .duration(750)
+          .attr("transform", "translate(0,0)");
+
+        slide.selectAll("path")
+            .data(function(slide) { return dataNest[set][slide] || [0, 0]; })
+          .transition()
+            .duration(750)
+            .attr("d", rateline(data.filter(function(d){ return d.age === set;})));
+        }
+      break;
+      case 39:
+        if(set === 36 || set === 90 || set === 144) {}else{
+          set1 = set + 18;
+          //x.domain([set, set + 18]);
+          sliders.transition()
+              .duration(750)
+              .attr("transform", "translate(0,0)");
+          slide.selectAll("path")
+              .data(function(slide) { return dataNest[set][slide] || [0, 0]; })
+            .transition()
+              .duration(750)
+              .style("stroke", "none");
+//              .attr("d", rateline(data.filter(function(d){ return d.age === set;})));
+          slide.selectAll("path")
+              .data(function(slide) { return dataNest[set1][slide] || [0, 0]; })
+            .transition()
+              .duration(750)
+              .attr("d", rateline(data.filter(function(d){ return d.age === set1;})));
+              console.log(JSON.stringify(slide.selectAll("path").data(function(slide) { return dataNest[set1][slide] || [0, 0]; })));
+        set = set1;
+        }
+      break;
+      case 40:
+        if(set < 99){
+          set1 = set + 54;
+          //x.domain([set, set + 18]);
+          sliders.transition()
+              .duration(750)
+              .attr("transform", "translate(0,0)");
+          slide.selectAll("path")
+              .data(function(slide) { return dataNest[set][slide] || [0, 0]; })
+            .transition()
+              .duration(750)
+              .style("stroke", "none");
+//              .attr("d", rateline(data.filter(function(d){ return d.age === set;})));
+          slide.selectAll("path")
+              .data(function(slide) { return dataNest[set1][slide] || [0, 0]; })
+            .transition()
+              .duration(750)
+              .attr("d", rateline(data.filter(function(d){ return d.age === set1;})));
+              console.log(JSON.stringify(slide.selectAll("path").data(function(slide) { return dataNest[set1][slide] || [0, 0]; })));
+        set = set1;
+        }
+      break;
+    }
+}
+
+
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+         .attr("class", "label")
+         .attr("x", width)
+         .attr("y", -6)
+         .style("text-anchor", "end")
+         .text("Year");
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+        .append("text")
+         .attr("class", "label")
+         .attr("y", -15)
+         .attr("x", width/6)
+         .attr("dy", ".71em")
+         .style("text-anchor", "end")
+         .text("Mortality rate per 100,000");
+});
+</script>
+</body>
