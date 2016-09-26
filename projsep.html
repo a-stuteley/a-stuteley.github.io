@@ -19,7 +19,7 @@ path {
 }
 
 .legend {
-    font-size: 14px;
+    font-size: 18px;
     text-anchor: middle;
 }
 
@@ -77,7 +77,7 @@ var chart2 = d3.select("body")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // Get the data
-d3.csv("proj.csv", function(error, data) {
+d3.csv("projsep.csv", function(error, data) {
 
     var chosen, spec;
 
