@@ -6,11 +6,32 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="googlebot" content="noindex, nofollow">
 
+  
+  
+
+  
+  
+  
+
+  
+
   <script type="text/javascript" src="/js/lib/dummy.js"></script>
- 
+
+  
+
+  
+
+  
+
+  
     <link rel="stylesheet" type="text/css" href="/css/result-light.css">
   
+
+  
+    
       <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+    
+  
 
   <style type="text/css">
     /* Style the list */
@@ -89,7 +110,7 @@ ul.tab li a:focus,
   text-overflow: ellipsis;
   white-s2ace: nowrap;
   float: left;
-  width: 80%;
+  width: 100%;
 }
 
 .ui.dropdown.hide {
@@ -111,15 +132,37 @@ ul.tab li a:focus,
   text-overflow: ellipsis;
   white-s2ace: nowrap;
   float: left;
-  width: 80%;
+  width: 100%;
   display: none;
+}
+
+.ui.dropdown.pop {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin-bottom: 10px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-s2ace: nowrap;
+  float: left;
+  width: 100%;
 }
 
 .containerpop {
   border: 1px solid #AAA;
   border-radius: 3px;
   color: #333;
-  padding: 5px 0;
+  padding: 5px 10px;
   font-size: inherit;
   text-overflow: ellipsis;
   text-align: center;
@@ -167,8 +210,9 @@ path {
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <body>
-  <div class="container" style="width:100%;">
+  
     <h2>Visualiser</h2>
+    <div class="container" style="width:100%;">
     <div style="float:left; width:20%;">
       <select id="country" class="ui dropdown">
         <option value="">Select a Country</option>
@@ -271,19 +315,19 @@ path {
       <h3>
     Population 1:
     </h3>
-      <select id="mortality_num1" class="ui dropdown">
+      <select id="mortality_num1" class="ui dropdown pop">
         <option value="">Select a mortality cause</option>
         <option value="1">Total Mortality</option>
         <option value="2">Gastric Death</option>
         <option value="3">Gastric Incidence</option>
       </select>
-      <select id="eth_num1" class="ui dropdown">
+      <select id="eth_num1" class="ui dropdown pop">
         <option value="">Select an ethnicity</option>
         <option value="1">Total</option>
         <option value="2">Maori</option>
         <option value="3">Non-Maori</option>
       </select>
-      <select id="gen_num1" class="ui dropdown">
+      <select id="gen_num1" class="ui dropdown pop">
         <option value="">Select a gender</option>
         <option value="1">Total</option>
         <option value="2">Male</option>
@@ -292,55 +336,73 @@ path {
 
 
     </div>
-    <div class="containerpop" id="pop2" style="float:left; width:20%;">
+    <div class="containerpop" id="pop2" style="float:left; width:20%; margin-left:10px;">
       <h3>
     Population 2:
     </h3>
-      <select id="mortality_num2" class="ui dropdown">
+      <select id="mortality_num2" class="ui dropdown pop">
         <option value="">Select a mortality cause</option>
         <option value="1">Total Mortality</option>
         <option value="2">Gastric Death</option>
         <option value="3">Gastric Incidence</option>
       </select>
-      <select id="eth_num2" class="ui dropdown">
+      <select id="eth_num2" class="ui dropdown pop">
         <option value="">Select an ethnicity</option>
         <option value="1">Total</option>
         <option value="2">Maori</option>
         <option value="3">Non-Maori</option>
       </select>
+      <select id="gen_num2" class="ui dropdown pop">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+      </select>
     </div>
-    <div class="containerpop" id="pop3" style="float:left; width:20%;">
+    <div class="containerpop" id="pop3" style="float:left; width:20%; margin-left:10px;">
       <h3>
     Population 3:
     </h3>
-      <select id="mortality_num3" class="ui dropdown">
+      <select id="mortality_num3" class="ui dropdown pop">
         <option value="">Select a mortality cause</option>
         <option value="1">Total Mortality</option>
         <option value="2">Gastric Death</option>
         <option value="3">Gastric Incidence</option>
       </select>
-      <select id="eth_num3" class="ui dropdown">
+      <select id="eth_num3" class="ui dropdown pop">
         <option value="">Select an ethnicity</option>
         <option value="1">Total</option>
         <option value="2">Maori</option>
         <option value="3">Non-Maori</option>
       </select>
+      <select id="gen_num3" class="ui dropdown pop">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+      </select>
     </div>
-    <div class="containerpop" id="pop4" style="float:left; width:20%;">
+    <div class="containerpop" id="pop4" style="float:left; width:20%; margin-left:10px;">
       <h3>
     Population 4:
     </h3>
-      <select id="mortality_num4" class="ui dropdown">
+      <select id="mortality_num4" class="ui dropdown pop">
         <option value="">Select a mortality cause</option>
         <option value="1">Total Mortality</option>
         <option value="2">Gastric Death</option>
         <option value="3">Gastric Incidence</option>
       </select>
-      <select id="eth_num4" class="ui dropdown">
+      <select id="eth_num4" class="ui dropdown pop">
         <option value="">Select an ethnicity</option>
         <option value="1">Total</option>
         <option value="2">Maori</option>
         <option value="3">Non-Maori</option>
+      </select>
+      <select id="gen_num4" class="ui dropdown pop">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
       </select>
     </div>
   </div>
@@ -368,6 +430,11 @@ path {
   </div>
 </body>
 
+  
+
+
+
+
 <script type='text/javascript'>//<![CDATA[
 
 /*
@@ -384,10 +451,11 @@ function geographic() {
 }
 //function to extend standard selection
 function standard_type() {
-	var doc = document;
-  if (doc.getElementById("standard_type").value === "1") {
+	var doc = document, type = doc.getElementById("standard_type").value;
+  if (type === "1") {
     doc.getElementById("standard_pop").classList.toggle("show");
-  } else if (doc.getElementById("standard_type").value === "2") {
+  }
+  if (type === "2") {
     switch (parseInt(doc.getElementById("numpop").value)) {
       case 1:
         doc.getElementById("standard_int1").classList.toggle("show");
