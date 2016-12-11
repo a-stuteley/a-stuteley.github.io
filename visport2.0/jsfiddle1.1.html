@@ -1,0 +1,791 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  
+  
+
+  
+  
+  
+
+  
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+
+  
+
+  
+
+  
+
+  
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+
+  
+    
+      <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+    
+  
+
+  <style type="text/css">
+    /* Style the list */
+
+ul.tab {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  float: left;
+  width: 100%;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+
+/* Float the list items side by side */
+
+ul.tab li {
+  float: left;
+}
+
+
+/* Style the links inside the list items */
+
+ul.tab li a {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+
+/* Change background color of links on hover */
+
+ul.tab li a:hover {
+  background-color: #ddd;
+}
+
+
+/* Create an active/current tablink class */
+
+ul.tab li a:focus,
+.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.ui.dropdown {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin-bottom: 10px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-s2ace: nowrap;
+  float: left;
+  width: 100%;
+}
+
+.ui.dropdown.hide {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin-bottom: 10px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-s2ace: nowrap;
+  float: left;
+  width: 100%;
+  display: none;
+}
+
+.ui.dropdown.pop {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin-bottom: 10px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-s2ace: nowrap;
+  float: left;
+  width: 100%;
+}
+
+.containerpop {
+  border: 1px solid #AAA;
+  border-radius: 3px;
+  color: #333;
+  padding: 5px 10px;
+  font-size: inherit;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 80%;
+  display: none;
+  margin-bottom: 10px;
+}
+
+
+/* Styling the first graphs */
+
+body {
+  font: 10px sans-serif;
+}
+
+path {
+  stroke: steelblue;
+  stroke-width: 3;
+  fill: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.legend {
+  font-size: 14px;
+  text-anchor: middle;
+}
+
+  </style>
+
+  <title>vis2.0</title>
+
+  
+</head>
+
+<body>
+  <title>Visualiser</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://raw.githubusercontent.com/a-stuteley/a-stuteley.github.io/master/proj.js"></script>-->
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<body>
+  
+    <h2 style="margin-left:15px;">Visualiser</h2>
+    <div class="container" style="width:100%;">
+    <div style="float:left; width:20%;">
+      <select id="country" class="ui dropdown">
+        <option value="">Select a Country</option>
+        <option value="1">New Zealand</option>
+        <option value="2">Cook Islands</option>
+        <option value="3">Other</option>
+      </select>
+      <select onclick="update_num()" id="numpop" class="ui dropdown">
+        <option value="">Select number of populations</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
+    <div style="float:left; width:20%; margin-left:10px;">
+      <select onclick="geographic()" id="national" class="ui dropdown">
+        <option value="">Select a geographic type</option>
+        <option value="1">National</option>
+        <option value="2">Sub-National</option>
+      </select>
+      <select id="subnational" class="ui dropdown hide">
+        <option value="">Select a sub-national type</option>
+        <option value="1">Regional</option>
+        <option value="2">TLA</option>
+        <option value="3">DHB</option>
+        <option value="4">Rohe</option>
+      </select>
+
+    </div>
+    <div style="float:left; width:20%; margin-left:10px;">
+      <select id="agegrouping" class="ui dropdown">
+        <option value="">Select an age grouping</option>
+        <option value="1">Total</option>
+        <option value="2">5-year bands</option>
+        <option value="3">Other</option>
+      </select>
+    </div>
+    <div style="float:left; width:20%; margin-left:10px;">
+      <select onclick="standard_type()" id="standard_type" class="ui dropdown">
+        <option value="">Select a standard type</option>
+        <option value="1">External</option>
+        <option value="2">Internal</option>
+      </select>
+      <select id="standard_pop" class="ui dropdown hide">
+        <option value="">Select a standard type</option>
+        <option value="1">WHO</option>
+        <option value="2">Segi</option>
+        <option value="3">Maori 13 Census</option>
+      </select>
+      <select id="standard_int1" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+      </select>
+      <select id="standard_int2" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+      </select>
+      <select id="standard_int3" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+      </select>
+      <select id="standard_int4" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+        <option value="4">Population 4</option>
+      </select>
+      <select id="standard_num1" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+      </select>
+      <select id="standard_num2" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+      </select>
+      <select id="standard_num3" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+      </select>
+      <select id="standard_num4" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+        <option value="4">Population 4</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container" style="width:100%;">
+    <div class="containerpop" id="pop1" style="float:left; width:20%;">
+      <h3>
+    Population 1:
+    </h3>
+      <select id="mortality_num1" class="ui dropdown pop">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num1" class="ui dropdown pop">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+      <select id="gen_num1" class="ui dropdown pop">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+      </select>
+
+
+    </div>
+    <div class="containerpop" id="pop2" style="float:left; width:20%; margin-left:10px;">
+      <h3>
+    Population 2:
+    </h3>
+      <select id="mortality_num2" class="ui dropdown pop">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num2" class="ui dropdown pop">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+      <select id="gen_num2" class="ui dropdown pop">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+      </select>
+    </div>
+    <div class="containerpop" id="pop3" style="float:left; width:20%; margin-left:10px;">
+      <h3>
+    Population 3:
+    </h3>
+      <select id="mortality_num3" class="ui dropdown pop">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num3" class="ui dropdown pop">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+      <select id="gen_num3" class="ui dropdown pop">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+      </select>
+    </div>
+    <div class="containerpop" id="pop4" style="float:left; width:20%; margin-left:10px;">
+      <h3>
+    Population 4:
+    </h3>
+      <select id="mortality_num4" class="ui dropdown pop">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num4" class="ui dropdown pop">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+      <select id="gen_num4" class="ui dropdown pop">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container" style="width:100%; float:left;">
+    <ul class="tab">
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Table')" id="tab1">Table</a></li>
+      <li>
+      <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Graph 1')" id="tab2">Graph 1</a>
+      </li>
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Graph 2')" id="tab3">Graph 2</a></li>
+    </ul>
+
+    <div id="Table" class="tabcontent">
+
+    </div>
+
+    <div id="Graph 1" class="tabcontent">
+      
+      <!--<object type="text/html" data="https://a-stuteley.github.io/proj.html" style="width:100%;height:1400px;" id="graph1"></object>-->
+    </div>
+
+    <div id="Graph 2" class="tabcontent">
+
+    </div>
+  </div>
+</body>
+
+  
+
+
+
+
+<script type='text/javascript'>//<![CDATA[
+
+/*
+Initial js script for the ui of visualiser
+Alex Stuteley
+*/
+
+//function to extend geographic selection
+function geographic() {
+	var doc = document;
+  if (doc.getElementById("national").value === "2") {
+    doc.getElementById("subnational").classList.toggle("show");
+  }
+}
+//function to extend standard selection
+function standard_type() {
+	var doc = document, type = doc.getElementById("standard_type").value;
+  if (type === "1") {
+    doc.getElementById("standard_pop").classList.toggle("show");
+  }
+  if (type === "2") {
+    switch (parseInt(doc.getElementById("numpop").value)) {
+      case 1:
+        doc.getElementById("standard_int1").classList.toggle("show");
+        break;
+      case 2:
+        doc.getElementById("standard_int2").classList.toggle("show");
+        break;
+      case 3:
+        doc.getElementById("standard_int3").classList.toggle("show");
+        break;
+      case 4:
+        doc.getElementById("standard_int4").classList.toggle("show");
+        break
+    }
+  }
+}
+//function to dynamically update field on change of radio population numbers
+function update_num() {
+	var doc = document, numpop;
+  numpop = parseInt(doc.getElementById("numpop").value);
+  switch (numpop) {
+    case 1:
+      doc.getElementById("standard_num1").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      break;
+    case 2:
+      doc.getElementById("standard_num2").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      doc.getElementById("pop2").classList.toggle("show");
+      break;
+    case 3:
+      doc.getElementById("standard_num3").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      doc.getElementById("pop2").classList.toggle("show");
+      doc.getElementById("pop3").classList.toggle("show");
+      break;
+    case 4:
+      doc.getElementById("standard_num4").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      doc.getElementById("pop2").classList.toggle("show");
+      doc.getElementById("pop3").classList.toggle("show");
+      doc.getElementById("pop4").classList.toggle("show");
+      break;
+  }
+}
+
+//setup for the tabs below populations
+function openTab(evt, tabName) {
+	var doc = document;
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = doc.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = doc.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the link that opened the tab
+  doc.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+  //doc.getElementById("graph1").classList.toggle("show");
+}
+var doc = document;
+var el = doc.getElementById("tab2");
+el.addEventListener("click", function(){graphrates();
+  /*$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "https://raw.githubusercontent.com/a-stuteley/a-stuteley.github.io/master/proj.csv",
+        dataType: "text",
+        success: function(data) {console.log(data); graphrates();}
+     });
+});*/
+}, false);
+
+function graphrates () {
+  // Set the dimensions of the canvas / graph
+  var buffer = 50;
+  var margin = {top: 40, right: 80, bottom: 120, left: 80},
+      width = 1100 - margin.left - margin.right,
+      height = 450 - margin.top - margin.bottom;
+  // Parse the date / time
+  var formatDate = d3.time.format("%Y");
+  // Set the ranges
+  var x = d3.time.scale().range([0, width]);
+  var y = d3.scale.linear().range([height, 0]);
+  // Define the axes
+  var xAxis = d3.svg.axis().scale(x)
+      .orient("bottom")
+      .ticks(17)
+      .tickFormat(formatDate);
+  var yAxis = d3.svg.axis().scale(y)
+      .orient("left")
+      .ticks(10);
+  // Define the line
+  var rateline = d3.svg.line()
+      .x(function(d) { return x(d.year); })
+      .y(function(d) { return y(d.rate); });
+  var color = d3.scale.category10();
+  // Adds the svg canvas
+  var chart1 = d3.select("body")
+      .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // Adds the svg canvas
+  var chart2 = d3.select("body")
+      .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  // Get the data
+  d3.csv("https://raw.githubusercontent.com/a-stuteley/a-stuteley.github.io/master/proj.csv", function(error, data) {
+      var chosen, spec;
+      var total = data.filter(function(d) { return d.ageband == "Total";});
+      var pick = data.filter(function(d) { return d.ageband != "Total";});
+      total.forEach(function(d) {
+      d.year = formatDate.parse(d.year);
+      d.rate = +d.rate;
+      });
+      pick.forEach(function(d) {
+          d.year = formatDate.parse(d.year);
+          d.rate = +d.rate;
+      });
+      // Scale the range of the data
+      x.domain(d3.extent(total, function(d) { return d.year; }));
+      var ym = d3.max(total, function(d) { return d.rate; });
+      y.domain([0, ym + ym * 0.1]);
+      // Nest the entries by pop
+      var dataNest = d3.nest()
+          .key(function(d) {return d.pop;})
+          .entries(total);
+      console.log(JSON.stringify(d3.keys(total)));
+      legendSpace = width/dataNest.length; // spacing for the legend
+      // Loop through each pop / key
+      dataNest.forEach(function(d,i) {
+          chart1.append("path")
+              .attr("class", "line")
+              .style("stroke", function() { // Add the colours dynamically
+                  return (d.color = color(d.key)); })
+              .style("opacity", 0.3)
+              .attr("id", 'tag'+d.key.replace(/\s+/g, '-')) // assign ID
+              .attr("d", rateline(d.values))
+              .on("mouseover", function(){
+                  d3.select("#tag" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(50)
+                      .style("opacity", 1);
+                  d3.select("#nam" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(50)
+                      .style("opacity", 1);
+              })
+              .on("mouseout", function(){
+                  d3.select("#tag" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(400)
+                      .style("opacity", 0.3);
+                  d3.select("#nam" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(400)
+                      .style("opacity", 0.5);
+              })
+              .on("click", function(){
+                  spec = pick;
+
+                  chosen = d.key.replace(/\s+/g, ' ');
+                  chart2.selectAll("path").remove();
+                  chart2.selectAll("g").remove();
+                  chart2.selectAll("text").remove();
+                  spec = pick.filter(function(d) { return (d.pop == chosen);});
+                  //console.log(JSON.stringify(spec));
+                  // Scale the range of the data
+                  x.domain(d3.extent(spec, function(d) { return d.year; }));
+                  var yym = d3.max(spec, function(d) { return d.rate; });
+                  y.domain([0, yym + yym * 0.1]);
+                  // Nest the entries by pop
+                  var specNest = d3.nest()
+                      .key(function(d) {return [d.pop, d.ageband];})
+                      .entries(spec);
+                  legendSpace2 = width/specNest.length;
+                  //legendSpace = width/specNest.length; // spacing for the legend
+                  // Loop through each pop / key
+                  specNest.forEach(function(d,i) {
+                      chart2.append("path")
+                          .attr("class", "line")
+                          //.attr("transform", "translate(" + width / 2 + ", 0)")
+                          .style("stroke", function() { // Add the colours dynamically
+                              return (d.color = color(chosen)); })
+                          .style("opacity", 0.3)
+                          .attr("id", 'tag' + i) // assign ID
+                          .attr("d", rateline(d.values))
+                          .on("mouseover", function(){
+                              d3.select("#tag" + i)
+                                  .transition().duration(50)
+                                  .style("opacity", 1);
+                              d3.select("#nam" + i)
+                                  .transition().duration(50)
+                                  .style("opacity", 1);
+                                  //console.log(JSON.stringify(i));
+                          })
+                          .on("mouseout", function(){
+                              d3.select("#tag" + i)
+                                  .transition().duration(400)
+                                  .style("opacity", 0.3);
+                              d3.select("#nam" + i)
+                                  .transition().duration(400)
+                                  .style("opacity", 0.5);
+                          });
+                          var labs = ["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80+"];
+                          // Add the Legend
+                          chart2.append("text")
+                              .attr("x", (legendSpace2 / 2) + i * legendSpace2)  // space legend
+                              .attr("y", -(margin.top / 2))
+                              .attr("id", 'nam' + i) // assign ID
+                              .attr("class", "legend")    // style the legend
+                              .style("opacity", 0.5)
+                              .style("fill", function() { // Add the colours dynamically
+                                  return (d.color = color(chosen)); })
+                              .text(labs[i])
+                              .on("mouseover", function(){
+                              d3.select("#nam" + i)
+                                  .transition().duration(50)
+                                  .style("opacity", 1);
+                              d3.select("#tag" + i)
+                                  .transition().duration(50)
+                                  .style("opacity", 1);
+                              })
+                              .on("mouseout", function(){
+                              d3.select("#nam" + i)
+                                  .transition().duration(400)
+                                  .style("opacity", 0.5);
+                              d3.select("#tag" + i)
+                                  .transition().duration(400)
+                                  .style("opacity", 0.3);
+                              });
+                          //console.log(JSON.stringify(specNest));
+                          //console.log(JSON.stringify(d.values));
+                  });
+                  // Add the X Axis
+                  chart2.append("g")
+                      .attr("class", "x axis")
+                      .attr("transform", "translate(0," + height + ")")
+                      .call(xAxis)
+                      .append("text")
+                       .attr("class", "label")
+                       .attr("x", width)
+                       .attr("y", -6)
+                       .style("text-anchor", "end")
+                       .text("Year");
+                  // Add the Y Axis
+                  chart2.append("g")
+                      .attr("class", "y axis")
+                      .call(yAxis)
+                      .append("text")
+                       .attr("class", "label")
+                       .attr("y", 0)
+                       .attr("x", width/6)
+                       .attr("dy", ".71em")
+                       .style("text-anchor", "end")
+                       .text("Mortality rate per 100,000");
+
+                  console.log(JSON.stringify(chosen));
+                  
+              });
+
+          // Add the Legend
+          chart1.append("text")
+              .attr("x", (legendSpace / 2) + i * legendSpace)  // space legend
+              .attr("y", height + (margin.bottom / 2) + 5)
+              .attr("class", "legend")    // style the legend
+              .style("opacity", 0.5)
+              .attr("id", 'nam' + d.key.replace(/\s+/g, '-'))
+              .style("fill", function() { // Add the colours dynamically
+                  return (d.color = color(d.key)); })
+              .text(d.key)
+              .on("mouseover", function(){
+                  d3.select("#nam" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(50)
+                      .style("opacity", 1);
+                  d3.select("#tag" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(50)
+                      .style("opacity", 1);
+                  })
+              .on("mouseout", function(){
+                  d3.select("#nam" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(400)
+                      .style("opacity", 0.5);
+                  d3.select("#tag" + d.key.replace(/\s+/g, '-'))
+                      .transition().duration(400)
+                      .style("opacity", 0.3);
+              });
+      });
+      // Add the X Axis
+      chart1.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .append("text")
+           .attr("class", "label")
+           .attr("x", width)
+           .attr("y", -6)
+           .style("text-anchor", "end")
+           .text("Year");
+      // Add the Y Axis
+      chart1.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .append("text")
+           .attr("class", "label")
+           .attr("y", 0)
+           .attr("x", width/6)
+           .attr("dy", ".71em")
+           .style("text-anchor", "end")
+           .text("Mortality rate per 100,000");
+  });
+}
+//]]> 
+
+</script>
+
+</body>
+
+</html>
+
