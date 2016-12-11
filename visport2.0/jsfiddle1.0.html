@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  <script type="text/javascript" src="/js/lib/dummy.js"></script>
+ 
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+      <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+
+  <style type="text/css">
+    /* Style the list */
+
+ul.tab {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  float: left;
+  width: 100%;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
+
+/* Float the list items side by side */
+
+ul.tab li {
+  float: left;
+}
+
+
+/* Style the links inside the list items */
+
+ul.tab li a {
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+
+/* Change background color of links on hover */
+
+ul.tab li a:hover {
+  background-color: #ddd;
+}
+
+
+/* Create an active/current tablink class */
+
+ul.tab li a:focus,
+.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+.ui.dropdown {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin-bottom: 10px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-s2ace: nowrap;
+  float: left;
+  width: 80%;
+}
+
+.ui.dropdown.hide {
+  -webkit-appearance: button;
+  -webkit-border-radius: 2px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  -webkit-padding-end: 20px;
+  -webkit-padding-start: 2px;
+  -webkit-user-select: none;
+  background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: 97% center;
+  background-repeat: no-repeat;
+  border: 1px solid #AAA;
+  color: #555;
+  font-size: inherit;
+  margin-bottom: 10px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-s2ace: nowrap;
+  float: left;
+  width: 80%;
+  display: none;
+}
+
+.containerpop {
+  border: 1px solid #AAA;
+  border-radius: 3px;
+  color: #333;
+  padding: 5px 0;
+  font-size: inherit;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 80%;
+  display: none;
+}
+
+
+/* Styling the first graphs */
+
+body {
+  font: 8px sans-serif;
+}
+
+path {
+  stroke: steelblue;
+  stroke-width: 3;
+  fill: none;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: grey;
+  stroke-width: 2;
+  shape-rendering: crispEdges;
+}
+
+.legend {
+  font-size: 14px;
+  text-anchor: middle;
+}
+
+  </style>
+
+  <title>vis2.0</title>
+
+  
+</head>
+
+<body>
+  <title>Visualiser</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<body>
+  <div class="container" style="width:100%;">
+    <h2>Visualiser</h2>
+    <div style="float:left; width:20%;">
+      <select id="country" class="ui dropdown">
+        <option value="">Select a Country</option>
+        <option value="1">New Zealand</option>
+        <option value="2">Cook Islands</option>
+        <option value="3">Other</option>
+      </select>
+      <select onclick="update_num()" id="numpop" class="ui dropdown">
+        <option value="">Select number of populations</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+      </select>
+    </div>
+    <div style="float:left; width:20%; margin-left:10px;">
+      <select onclick="geographic()" id="national" class="ui dropdown">
+        <option value="">Select a geographic type</option>
+        <option value="1">National</option>
+        <option value="2">Sub-National</option>
+      </select>
+      <select id="subnational" class="ui dropdown hide">
+        <option value="">Select a sub-national type</option>
+        <option value="1">Regional</option>
+        <option value="2">TLA</option>
+        <option value="3">DHB</option>
+        <option value="4">Rohe</option>
+      </select>
+
+    </div>
+    <div style="float:left; width:20%; margin-left:10px;">
+      <select id="agegrouping" class="ui dropdown">
+        <option value="">Select an age grouping</option>
+        <option value="1">Total</option>
+        <option value="2">5-year bands</option>
+        <option value="3">Other</option>
+      </select>
+    </div>
+    <div style="float:left; width:20%; margin-left:10px;">
+      <select onclick="standard_type()" id="standard_type" class="ui dropdown">
+        <option value="">Select a standard type</option>
+        <option value="1">External</option>
+        <option value="2">Internal</option>
+      </select>
+      <select id="standard_pop" class="ui dropdown hide">
+        <option value="">Select a standard type</option>
+        <option value="1">WHO</option>
+        <option value="2">Segi</option>
+        <option value="3">Maori 13 Census</option>
+      </select>
+      <select id="standard_int1" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+      </select>
+      <select id="standard_int2" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+      </select>
+      <select id="standard_int3" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+      </select>
+      <select id="standard_int4" class="ui dropdown hide">
+        <option value="">Standard population</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+        <option value="4">Population 4</option>
+      </select>
+      <select id="standard_num1" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+      </select>
+      <select id="standard_num2" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+      </select>
+      <select id="standard_num3" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+      </select>
+      <select id="standard_num4" class="ui dropdown hide">
+        <option value="">Select a baseline</option>
+        <option value="1">Population 1 (default)</option>
+        <option value="2">Population 2</option>
+        <option value="3">Population 3</option>
+        <option value="4">Population 4</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container" style="width:100%;">
+    <div class="containerpop" id="pop1" style="float:left; width:20%;">
+      <h3>
+    Population 1:
+    </h3>
+      <select id="mortality_num1" class="ui dropdown">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num1" class="ui dropdown">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+      <select id="gen_num1" class="ui dropdown">
+        <option value="">Select a gender</option>
+        <option value="1">Total</option>
+        <option value="2">Male</option>
+        <option value="3">Female</option>
+      </select>
+
+
+    </div>
+    <div class="containerpop" id="pop2" style="float:left; width:20%;">
+      <h3>
+    Population 2:
+    </h3>
+      <select id="mortality_num2" class="ui dropdown">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num2" class="ui dropdown">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+    </div>
+    <div class="containerpop" id="pop3" style="float:left; width:20%;">
+      <h3>
+    Population 3:
+    </h3>
+      <select id="mortality_num3" class="ui dropdown">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num3" class="ui dropdown">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+    </div>
+    <div class="containerpop" id="pop4" style="float:left; width:20%;">
+      <h3>
+    Population 4:
+    </h3>
+      <select id="mortality_num4" class="ui dropdown">
+        <option value="">Select a mortality cause</option>
+        <option value="1">Total Mortality</option>
+        <option value="2">Gastric Death</option>
+        <option value="3">Gastric Incidence</option>
+      </select>
+      <select id="eth_num4" class="ui dropdown">
+        <option value="">Select an ethnicity</option>
+        <option value="1">Total</option>
+        <option value="2">Maori</option>
+        <option value="3">Non-Maori</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="container" style="width:100%; float:left;">
+    <ul class="tab">
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Table')">Table</a></li>
+      <li>
+      <a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Graph 1')" >Graph 1</a>
+      </li>
+      <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Graph 2')">Graph 2</a></li>
+    </ul>
+
+    <div id="Table" class="tabcontent">
+
+    </div>
+
+    <div id="Graph 1" class="tabcontent">
+      <object type="text/html" data="https://a-stuteley.github.io/proj.html" style="width:100%;height:1400px;" id="graph1"></object>
+    </div>
+
+    <div id="Graph 2" class="tabcontent">
+
+    </div>
+  </div>
+</body>
+
+<script type='text/javascript'>//<![CDATA[
+
+/*
+Initial js script for the ui of visualiser
+Alex Stuteley
+*/
+
+//function to extend geographic selection
+function geographic() {
+	var doc = document;
+  if (doc.getElementById("national").value === "2") {
+    doc.getElementById("subnational").classList.toggle("show");
+  }
+}
+//function to extend standard selection
+function standard_type() {
+	var doc = document;
+  if (doc.getElementById("standard_type").value === "1") {
+    doc.getElementById("standard_pop").classList.toggle("show");
+  } else if (doc.getElementById("standard_type").value === "2") {
+    switch (parseInt(doc.getElementById("numpop").value)) {
+      case 1:
+        doc.getElementById("standard_int1").classList.toggle("show");
+        break;
+      case 2:
+        doc.getElementById("standard_int2").classList.toggle("show");
+        break;
+      case 3:
+        doc.getElementById("standard_int3").classList.toggle("show");
+        break;
+      case 4:
+        doc.getElementById("standard_int4").classList.toggle("show");
+        break
+    }
+  }
+}
+//function to dynamically update field on change of radio population numbers
+function update_num() {
+	var doc = document, numpop;
+  numpop = parseInt(doc.getElementById("numpop").value);
+  switch (numpop) {
+    case 1:
+      doc.getElementById("standard_num1").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      break;
+    case 2:
+      doc.getElementById("standard_num2").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      doc.getElementById("pop2").classList.toggle("show");
+      break;
+    case 3:
+      doc.getElementById("standard_num3").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      doc.getElementById("pop2").classList.toggle("show");
+      doc.getElementById("pop3").classList.toggle("show");
+      break;
+    case 4:
+      doc.getElementById("standard_num4").classList.toggle("show");
+      doc.getElementById("pop1").classList.toggle("show");
+      doc.getElementById("pop2").classList.toggle("show");
+      doc.getElementById("pop3").classList.toggle("show");
+      doc.getElementById("pop4").classList.toggle("show");
+      break;
+  }
+}
+
+//setup for the tabs below populations
+function openTab(evt, tabName) {
+	var doc = document;
+  // Declare all variables
+  var i, tabcontent, tablinks;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = doc.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = doc.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the link that opened the tab
+  doc.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+  doc.getElementById("graph1").classList.toggle("show");
+}
+
+
+
+//]]> 
+
+</script>
+
+</body>
+
+</html>
+
