@@ -487,6 +487,7 @@ td {
 
 table {
   border-collapse: collapse;
+  float: left;
 }
 
 body {
@@ -834,14 +835,14 @@ function produceGraph1() {
     });
   var color = d3.scale.category10();
   // Adds the svg canvas
-  var chart1 = d3.select("body")
+  var chart1 = d3.select('#Graph1')
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
   // Adds the svg canvas
-  var chart2 = d3.select("body")
+  var chart2 = d3.select('#Graph1')
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -911,7 +912,7 @@ function produceGraph1() {
         return d.pop;
       })
       .entries(total);
-    console.log(JSON.stringify(d3.keys(total)));
+    //console.log(JSON.stringify(d3.keys(total)));
     legendSpace = width / dataNest.length; // spacing for the legend
     // Loop through each pop / key
     dataNest.forEach(function(d, i) {
