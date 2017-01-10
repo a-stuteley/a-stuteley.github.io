@@ -754,49 +754,48 @@ function produceTable() {
 
     //console.log(reduced);
     //console.log(d);
-    var table;
+    var table, tableBody, row, cell, cellText;
     //if (reduced.length > 0) {
     //document.body.removeChild(table);
-
     table = document.createElement("table");
-    document.body.appendChild(table);
-    var tableBody = document.createElement("tbody");
-    var row = document.createElement("tr");
-    var cell = document.createElement("td");
-    var cellText = document.createTextNode("Population");
+    //document.getElementById("Table").appendChild(table);
+    tableBody = document.createElement("tbody");
+    row = document.createElement("tr");
+    cell = document.createElement("td");
+    cellText = document.createTextNode("Population");
     cell.appendChild(cellText);
     row.appendChild(cell);
-    var cell = document.createElement("td");
-    var cellText = document.createTextNode("Ageband");
+    cell = document.createElement("td");
+    cellText = document.createTextNode("Ageband");
     cell.appendChild(cellText);
     row.appendChild(cell);
-    var cell = document.createElement("td");
-    var cellText = document.createTextNode("Year");
+    cell = document.createElement("td");
+    cellText = document.createTextNode("Year");
     cell.appendChild(cellText);
     row.appendChild(cell);
-    var cell = document.createElement("td");
-    var cellText = document.createTextNode("Rate");
+    cell = document.createElement("td");
+    cellText = document.createTextNode("Rate");
     cell.appendChild(cellText);
     row.appendChild(cell);
     tableBody.appendChild(row);
     //}
     //var repeater = ["pop", "ageband", "year", "rate"];
     for (var i = 0; i < reduced.length; i++) {
-      var row = document.createElement("tr");
-      var cell = document.createElement("td");
-      var cellText = document.createTextNode(reduced[i].pop);
+      row = document.createElement("tr");
+      cell = document.createElement("td");
+      cellText = document.createTextNode(reduced[i].pop);
       cell.appendChild(cellText);
       row.appendChild(cell);
-      var cell = document.createElement("td");
-      var cellText = document.createTextNode(reduced[i].ageband);
+      cell = document.createElement("td");
+      cellText = document.createTextNode(reduced[i].ageband);
       cell.appendChild(cellText);
       row.appendChild(cell);
-      var cell = document.createElement("td");
-      var cellText = document.createTextNode(reduced[i].year);
+      cell = document.createElement("td");
+      cellText = document.createTextNode(reduced[i].year);
       cell.appendChild(cellText);
       row.appendChild(cell);
-      var cell = document.createElement("td");
-      var cellText = document.createTextNode(reduced[i].rate);
+      cell = document.createElement("td");
+      cellText = document.createTextNode(reduced[i].rate);
       cell.appendChild(cellText);
       row.appendChild(cell);
 
@@ -812,7 +811,7 @@ function produceTable() {
 }
 
 function produceGraph1() {
-  console.log("graphworking");
+  //console.log("graphworking");
   var filename = getName();
   var dataset = [];
   //var formatDate = d3.time.format("%Y");
@@ -1368,9 +1367,7 @@ function produceGraph1() {
     </ul>
 
     <div id="Table" class="tabcontent">
-      <p>
-        hi
-      </p>
+      
     </div>
 
     <div id="Graph1" class="tabcontent">
