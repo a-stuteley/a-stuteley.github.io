@@ -483,7 +483,8 @@ th,
 td {
   border: 1px solid black;
   margin-left: 15px;
-  margin-top: 50px;
+  margin-top: 15px;
+  align: left;
 }
 
 table {
@@ -610,7 +611,7 @@ function openTab(evt, tabName) {
   document.getElementById(tabName).style.display = "block";
   evt.currentTarget.className += " active";
 
-  console.log(tabName);
+  //console.log(tabName);
   if (tabName === "Table") {
     $('#Table').empty();
     produceTable();
@@ -708,7 +709,7 @@ function getAgeband() {
 }
 
 function produceTable() {
-  console.log("working");
+  //console.log("working");
   var filename = getName();
   var dataset = [];
   //var formatDate = d3.time.format("%Y");
@@ -1366,13 +1367,13 @@ function produceGraph1() {
       <li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Graph2')">Graph 2</a></li>
     </ul>
 
-    <div id="Table" class="tabcontent" onclick="produceTable();">
+    <div id="Table" class="tabcontent">
       <p>
         hi
       </p>
     </div>
 
-    <div id="Graph1" class="tabcontent" onclick="produceGraph1();">
+    <div id="Graph1" class="tabcontent">
 
     </div>
 
