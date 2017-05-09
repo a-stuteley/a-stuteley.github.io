@@ -1,0 +1,330 @@
+document.write('\
+<!DOCTYPE html>\
+<meta charset="utf-8">\
+<style>\
+\
+body { font: 8px sans-serif;}\
+\
+path {\
+    stroke: steelblue;\
+    stroke-width: 3;\
+    fill: none;\
+}\
+\
+.axis path,\
+.axis line {\
+    fill: none;\
+    stroke: grey;\
+    stroke-width: 2;\
+    shape-rendering: crispEdges;\
+}\
+\
+.legend {\
+    font-size: 14px;\
+    text-anchor: middle;\
+}\
+\
+</style>\
+<body>\
+\
+<script src="d3.min.js"></script>\
+\
+<script>\
+// Set the dimensions of the canvas / graph\
+\
+var buffer = 50;\
+var margin = {top: 60, right: 80, bottom: 120, left: 80},\
+    width = 1200 - margin.left - margin.right,\
+    height = 400 - margin.top - margin.bottom;\
+\
+// Parse the date / time\
+var formatDate = d3.time.format("%Y");\
+\
+// Set the ranges\
+var x = d3.time.scale().range([0, width]);\
+var y = d3.scale.linear().range([height, 0]);\
+\
+// Define the axes\
+var xAxis = d3.svg.axis().scale(x)\
+    .orient("bottom")\
+    .ticks(17)\
+    .tickFormat(formatDate);\
+\
+var yAxis = d3.svg.axis().scale(y)\
+    .orient("left")\
+    .ticks(10);\
+\
+// Define the line\
+var rateline = d3.svg.line()\
+    .x(function(d) { return x(d.year); })\
+    .y(function(d) { return y(d.rate); });\
+\
+var color = d3.scale.category10();\
+\
+// Adds the svg canvas\
+var chart1 = d3.select("body")\
+    .append("svg")\
+        .attr("width", width + margin.left + margin.right)\
+        .attr("height", height + margin.top + margin.bottom)\
+    .append("g")\
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");\
+\
+// Adds the svg canvas\
+var chart2 = d3.select("body")\
+    .append("svg")\
+        .attr("width", width + margin.left + margin.right)\
+        .attr("height", height + margin.top + margin.bottom)\
+    .append("g")\
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");\
+\
+// Get the data\
+d3.csv("proj.csv", function(error, data) {\
+\
+    var chosen, spec;\
+\
+    var total = data.filter(function(d) { return d.ageband == "Total";});\
+    var pick = data.filter(function(d) { return d.ageband != "Total";});\
+\
+\
+\
+    total.forEach(function(d) {\
+		d.year = formatDate.parse(d.year);\
+		d.rate = +d.rate;\
+    });\
+\
+    pick.forEach(function(d) {\
+        d.year = formatDate.parse(d.year);\
+        d.rate = +d.rate;\
+    });\
+\
+    // Scale the range of the data\
+    x.domain(d3.extent(total, function(d) { return d.year; }));\
+    var ym = d3.max(total, function(d) { return d.rate; });\
+    y.domain([0, ym + ym * 0.1]);\
+\
+    // Nest the entries by pop\
+    var dataNest = d3.nest()\
+        .key(function(d) {return d.pop;})\
+        .entries(total);\
+    console.log(JSON.stringify(d3.keys(total)));\
+\
+    legendSpace = width/dataNest.length; // spacing for the legend\
+\
+    // Loop through each pop / key\
+    dataNest.forEach(function(d,i) {\
+\
+        chart1.append("path")\
+            .attr("class", "line")\
+            .style("stroke", function() { // Add the colours dynamically\
+                return (d.color = color(d.key)); })\
+            .style("opacity", 0.3)\
+            .attr("id", 'tag'+d.key.replace(/\s+/g, '-')) // assign ID\
+            .attr("d", rateline(d.values))\
+            .on("mouseover", function(){\
+                d3.select("#tag" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(50)\
+                    .style("opacity", 1);\
+                d3.select("#nam" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(50)\
+                    .style("opacity", 1);\
+            })\
+            .on("mouseout", function(){\
+                d3.select("#tag" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(400)\
+                    .style("opacity", 0.3);\
+                d3.select("#nam" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(400)\
+                    .style("opacity", 0.5);\
+            })\
+            .on("click", function(){\
+                spec = pick;\
+                /*var active = ('tag'+d.key.replace(/\s+/g, '-')).active ? false : true,\
+                newOpacity = active ? 0.3 : 1;\
+                // Hide or show the elements\
+                d3.select('tag'+d.key.replace(/\s+/g, '-')).style("opacity", newOpacity);\
+                // Update whether or not the elements are active\
+                ('tag'+d.key.replace(/\s+/g, '-')).active = active;\
+                //var clicker = 0;\
+                //if(clicker % 2 === 0){\
+                //NEED TO FIX THE IDENTIFIERS SO THAT IT SPLITS RIGHT\
+                //\
+                console.log(JSON.stringify(active));\
+                console.log(JSON.stringify(newOpacity));*/\
+                chosen = d.key.replace(/\s+/g, ' ');\
+\
+                chart2.selectAll("path").remove();\
+                chart2.selectAll("g").remove();\
+                chart2.selectAll("text").remove();\
+                spec = pick.filter(function(d) { return (d.pop == chosen);});\
+\
+                //console.log(JSON.stringify(spec));\
+\
+                // Scale the range of the data\
+                x.domain(d3.extent(spec, function(d) { return d.year; }));\
+                var yym = d3.max(spec, function(d) { return d.rate; });\
+                y.domain([0, yym + yym * 0.1]);\
+\
+                // Nest the entries by pop\
+                var specNest = d3.nest()\
+                    .key(function(d) {return [d.pop, d.ageband];})\
+                    .entries(spec);\
+\
+                legendSpace2 = width/specNest.length;\
+\
+                //legendSpace = width/specNest.length; // spacing for the legend\
+\
+                // Loop through each pop / key\
+                specNest.forEach(function(d,i) {\
+\
+                    chart2.append("path")\
+                        .attr("class", "line")\
+                        //.attr("transform", "translate(" + width / 2 + ", 0)")\
+                        .style("stroke", function() { // Add the colours dynamically\
+                            return (d.color = color(chosen)); })\
+                        .style("opacity", 0.3)\
+                        .attr("id", 'tag' + i) // assign ID\
+                        .attr("d", rateline(d.values))\
+                        .on("mouseover", function(){\
+                            d3.select("#tag" + i)\
+                                .transition().duration(50)\
+                                .style("opacity", 1);\
+                            d3.select("#nam" + i)\
+                                .transition().duration(50)\
+                                .style("opacity", 1);\
+                                //console.log(JSON.stringify(i));\
+                        })\
+                        .on("mouseout", function(){\
+                            d3.select("#tag" + i)\
+                                .transition().duration(400)\
+                                .style("opacity", 0.3);\
+                            d3.select("#nam" + i)\
+                                .transition().duration(400)\
+                                .style("opacity", 0.5);\
+                        });\
+\
+                        var labs = ["0-4","5-9","10-14","15-19","20-24","25-29","30-34","35-39","40-44","45-49","50-54","55-59","60-64","65-69","70-74","75-79","80+"];\
+                        // Add the Legend\
+                        chart2.append("text")\
+                            .attr("x", (legendSpace2 / 2) + i * legendSpace2)  // space legend\
+                            .attr("y", -(margin.top / 2))\
+                            .attr("id", 'nam' + i) // assign ID\
+                            .attr("class", "legend")    // style the legend\
+                            .style("opacity", 0.5)\
+                            .style("fill", function() { // Add the colours dynamically\
+                                return (d.color = color(chosen)); })\
+                            .text(labs[i])\
+                            .on("mouseover", function(){\
+                            d3.select("#nam" + i)\
+                                .transition().duration(50)\
+                                .style("opacity", 1);\
+                            d3.select("#tag" + i)\
+                                .transition().duration(50)\
+                                .style("opacity", 1);\
+                            })\
+                            .on("mouseout", function(){\
+                            d3.select("#nam" + i)\
+                                .transition().duration(400)\
+                                .style("opacity", 0.5);\
+                            d3.select("#tag" + i)\
+                                .transition().duration(400)\
+                                .style("opacity", 0.3);\
+                            });\
+                        //console.log(JSON.stringify(specNest));\
+                        //console.log(JSON.stringify(d.values));\
+                });\
+                // Add the X Axis\
+                chart2.append("g")\
+                    .attr("class", "x axis")\
+                    .attr("transform", "translate(0," + height + ")")\
+                    .call(xAxis)\
+                    .append("text")\
+                     .attr("class", "label")\
+                     .attr("x", width)\
+                     .attr("y", -6)\
+                     .style("text-anchor", "end")\
+                     .text("Year");\
+\
+                // Add the Y Axis\
+                chart2.append("g")\
+                    .attr("class", "y axis")\
+                    .call(yAxis)\
+                    .append("text")\
+                     .attr("class", "label")\
+                     .attr("y", 0)\
+                     .attr("x", width/6)\
+                     .attr("dy", ".71em")\
+                     .style("text-anchor", "end")\
+                     .text("Mortality rate per 100,000");\
+\
+                /*}else{\
+                    chart2.selectAll("path")\
+                        .style("opacity", 0);\
+                }*/\
+\
+                //return chosen;\
+                console.log(JSON.stringify(chosen));\
+                //datapop = data.filter(function(d) { return ;});//pop == d.key.replace(/\s+/g, '-');});\
+                //chosen = d3.select("#tag" + d.key.replace(/\s+/g, '-'));\
+            });\
+            //console.log(JSON.stringify(d3.select("#tag"+d.key.replace(/\s+/g, '-'))));\
+            //console.log(JSON.stringify(chosen));\
+        // Add the Legend\
+        chart1.append("text")\
+            .attr("x", (legendSpace / 2) + i * legendSpace)  // space legend\
+            .attr("y", height + (margin.bottom / 2) + 5)\
+            .attr("class", "legend")    // style the legend\
+            .style("opacity", 0.5)\
+            .attr("id", 'nam' + d.key.replace(/\s+/g, '-'))\
+            .style("fill", function() { // Add the colours dynamically\
+                return (d.color = color(d.key)); })\
+            .text(d.key)\
+            .on("mouseover", function(){\
+                d3.select("#nam" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(50)\
+                    .style("opacity", 1);\
+                d3.select("#tag" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(50)\
+                    .style("opacity", 1);\
+                })\
+            .on("mouseout", function(){\
+                d3.select("#nam" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(400)\
+                    .style("opacity", 0.5);\
+                d3.select("#tag" + d.key.replace(/\s+/g, '-'))\
+                    .transition().duration(400)\
+                    .style("opacity", 0.3);\
+            });\
+    });\
+\
+    // Add the X Axis\
+    chart1.append("g")\
+        .attr("class", "x axis")\
+        .attr("transform", "translate(0," + height + ")")\
+        .call(xAxis)\
+        .append("text")\
+         .attr("class", "label")\
+         .attr("x", width)\
+         .attr("y", -6)\
+         .style("text-anchor", "end")\
+         .text("Year");\
+\
+    // Add the Y Axis\
+    chart1.append("g")\
+        .attr("class", "y axis")\
+        .call(yAxis)\
+        .append("text")\
+         .attr("class", "label")\
+         .attr("y", 0)\
+         .attr("x", width/6)\
+         .attr("dy", ".71em")\
+         .style("text-anchor", "end")\
+         .text("Mortality rate per 100,000");\
+\
+});\
+\
+\
+\
+\
+</script>\
+</body>\
+');
